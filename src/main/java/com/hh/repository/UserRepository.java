@@ -9,6 +9,11 @@ import com.hh.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
     User save(User hieuhoang);
+
     List<User> findByEmail(String email);
+
+    User findById(long id);
+
 }
