@@ -1,18 +1,31 @@
 package com.hh.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+
+@Table(name = "roles") // Ensure the table name matches your database schema
 public class Role {
-    
+
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 
     private Long id;
     private String name;
     private String description;
+
+    // Role one -> to many User ->
+    @OneToMany(mappedBy = "role")
+
+    private List<User> users;
+
+
     public Long getId() {
         return id;
     }

@@ -3,8 +3,11 @@ package com.hh.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+
+@Table(name = "products") // Ensure the table name matches your database schema
 public class Product {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -19,6 +22,9 @@ public class Product {
     private String sold;
     private String factory;
     private String target;
+
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }

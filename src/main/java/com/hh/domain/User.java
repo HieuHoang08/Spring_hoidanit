@@ -1,10 +1,19 @@
 package com.hh.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+
+@Table(name = "users") // Ensure the table name matches your database schema
+
 public class User {
 
     @Id
@@ -18,6 +27,22 @@ public class User {
     private String phone;
 
     private String avatar;
+
+    // User many -> to one Role -> . crt k + s  
+
+    @ManyToOne
+
+
+    @JoinColumn(name = "role_id") // Foreign key column in the users table
+
+    private Role role;
+
+
+
+    @OneToMany(mappedBy = "user") // Assuming you have a field 'user' in Order class
+    private List<Order> orders;
+
+
 
     public Long getId() {
         return id;
