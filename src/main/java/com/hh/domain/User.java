@@ -28,7 +28,7 @@ public class User {
 
     private String avatar;
 
-    // User many -> to one Role -> . crt k + s  
+    // User many -> to one Role -> . crt k + s
 
     @ManyToOne
 
