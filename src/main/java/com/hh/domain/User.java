@@ -31,12 +31,8 @@ public class User {
     // User many -> to one Role -> . crt k + s
 
     @ManyToOne
-
-
     @JoinColumn(name = "role_id") // Foreign key column in the users table
-
     private Role role;
-
 
 
     @OneToMany(mappedBy = "user") // Assuming you have a field 'user' in Order class
@@ -44,6 +40,18 @@ public class User {
 
 
 
+    public Role getRole() {
+        return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    public List<Order> getOrders() {
+        return orders;
+    }
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
     public Long getId() {
         return id;
     }

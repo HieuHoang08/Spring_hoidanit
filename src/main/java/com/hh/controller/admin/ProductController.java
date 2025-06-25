@@ -10,5 +10,5 @@ public class ProductController {
     public String getProductPage() {
         return "admin/product/show";
     }
-    
+
 }

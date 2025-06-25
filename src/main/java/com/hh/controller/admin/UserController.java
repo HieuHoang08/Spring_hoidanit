@@ -2,6 +2,7 @@ package com.hh.controller.admin;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,19 +10,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hh.domain.User;
+import com.hh.service.UploadService;
 import com.hh.service.UserService;
+
 
 @Controller
 
 public class UserController {
 
     private final UserService userService;
+    private final UploadService uploadService;
+    private final PasswordEncoder PasswordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService , UploadService uploadService,
+                          PasswordEncoder PasswordEncoder) {
         this.userService = userService;
+        this.uploadService = uploadService;
+        this.PasswordEncoder = PasswordEncoder;
     }
 
     @RequestMapping("/")
@@ -48,14 +57,21 @@ public class UserController {
         return "admin/user/detail";
     }
 
-    @RequestMapping("/admin/user/create")
+    @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public String createUserPage(Model model, @ModelAttribute("newUser") User newUser) {
+    @PostMapping(value = "/admin/user/create")
+    public String createUserPage(Model model,
+        @ModelAttribute("newUser") User newUser,
+        @RequestParam("hoidanitFile") MultipartFile file) {
+        String avatar =  this.uploadService.handleSaveFile(file, "avatar");
+        String hashPassword = this.PasswordEncoder.encode(newUser.getPassword());
+        newUser.setAvatar(avatar);
+        newUser.setPassword(hashPassword);
+        newUser.setRole(this.userService.getRoleByName(newUser.getRole().getName()));
         this.userService.handleSaveUser(newUser);
         return "redirect:/admin/user";
     }
@@ -68,9 +84,9 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUserPage(Model model, @ModelAttribute("newUser") User newUser){
+    public String postUpdateUserPage(Model model, @ModelAttribute("newUser") User newUser) {
         User updatedUser = this.userService.getUserById(newUser.getId());
-        if(updatedUser != null) {
+        if (updatedUser != null) {
             updatedUser.setAddress(newUser.getAddress());
             updatedUser.setFullname(newUser.getFullname());
             updatedUser.setPhone(newUser.getPhone());
