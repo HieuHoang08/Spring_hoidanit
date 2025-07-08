@@ -24,6 +24,7 @@
                                 <h1 class="mt-4">Manager Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Users</li>
                                     <li class="breadcrumb-item active">View</li>
                                 </ol>
                                 <div class="container mt-5">
@@ -42,7 +43,7 @@
                                             <li class="list-group-item">ID : ${user.id}</li>
                                             <li class="list-group-item">Email :${user.email}</li>
                                             <li class="list-group-item">FullName :${user.fullname}</li>
-                                            <li class="list-group-item">FullName :${user.role.name}</li>
+                                            <li class="list-group-item">Role :${user.role.name}</li>
                                             <li class="list-group-item">Address :${user.address} </li>
                                         </ul>
                                     </div>

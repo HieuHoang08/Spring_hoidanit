@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import com.hh.domain.User;
 import com.hh.service.UploadService;
 import com.hh.service.UserService;
 
+import jakarta.validation.Valid;
 
 @Controller
 
@@ -26,8 +29,10 @@ public class UserController {
     private final UploadService uploadService;
     private final PasswordEncoder PasswordEncoder;
 
-    public UserController(UserService userService , UploadService uploadService,
-                          PasswordEncoder PasswordEncoder) {
+    public UserController(
+            UserService userService,
+            UploadService uploadService,
+            PasswordEncoder PasswordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
         this.PasswordEncoder = PasswordEncoder;
@@ -65,9 +70,20 @@ public class UserController {
 
     @PostMapping(value = "/admin/user/create")
     public String createUserPage(Model model,
-        @ModelAttribute("newUser") User newUser,
-        @RequestParam("hoidanitFile") MultipartFile file) {
-        String avatar =  this.uploadService.handleSaveFile(file, "avatar");
+            @ModelAttribute("newUser") @Valid User newUser,
+            BindingResult newUserBindingResult,
+            @RequestParam("hoidanitFile") MultipartFile file
+            ) {
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(">>>" + error.getField() + " - " + error.getDefaultMessage());
+        }
+
+        //validate email
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
+        String avatar = this.uploadService.handleSaveFile(file, "avatar");
         String hashPassword = this.PasswordEncoder.encode(newUser.getPassword());
         newUser.setAvatar(avatar);
         newUser.setPassword(hashPassword);
@@ -104,7 +120,7 @@ public class UserController {
         return "admin/user/delete";
     }
 
-    @PostMapping("/admin/user/delete")
+    @PostMapping("/admin/user/delete/{id}")
     public String postDeleteUser(Model model, @ModelAttribute("newUser") User newUser) {
         User user = this.userService.getUserById(newUser.getId());
         this.userService.deleteUserById(user.getId());

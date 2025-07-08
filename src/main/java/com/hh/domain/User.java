@@ -2,6 +2,7 @@ package com.hh.domain;
 
 import java.util.List;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,6 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 
@@ -20,8 +24,20 @@ public class User {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 
     private Long id;
+
+    @NotNull
+    @Email
+    @Email(message = "Email is not valid",
+          regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+
     private String email;
+
+    @NotNull
+    @Size(min = 2,  message = "Password must be between 2 and 20 characters long")
     private String password;
+
+    @NotNull
+    @Size(min = 2, message = "Full name must be between 2 and 50 characters long")
     private String fullname;
     private String address;
     private String phone;

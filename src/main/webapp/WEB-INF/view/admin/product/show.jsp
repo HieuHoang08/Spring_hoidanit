@@ -13,7 +13,6 @@
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
             </head>
             <body class="sb-nav-fixed">
-
             <jsp:include page = "../layout/header.jsp" />
                 <div id="layoutSidenav">
                     <div id="layoutSidenav_nav">
@@ -22,14 +21,49 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">Manager Orders</h1>
+                                <h1 class="mt-4">Manager Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                                     <li class="breadcrumb-item active">Product</li>
                                 </ol>
-                                <div>
-                                    Table product
-                                 </div>
+                                <div class="mt-5">
+                                        <div class="row">
+                                            <div class="col-12 mx-auto">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h3>Table products</h3>
+                                                    <a href="/admin/product/create" class="btn btn-secondary">Create a product</a>
+                                                </div>
+                                                <hr />
+                                                <table class = "table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">ID</th>
+                                                            <th scope="col">Name</th>
+                                                            <th scope="col">Price</th>
+                                                            <th scope="col">Factory</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="product" items="${products}">
+                                                            <tr>
+                                                                <th>${product.id}</th>
+                                                                <td>${product.name}</td>
+                                                                <td>${product.price}</td>
+                                                                <td>${product.factory}</td>
+                                                                <td>
+                                                                    <a href="/admin/product/${product.id}" class="btn btn-success">  View  </a>
+                                                                    <a href="/admin/product/update/${product.id}" class="btn btn-primary mx-2">  Update  </a>
+                                                                    <a href="/admin/product/delete/${product.id}" class="btn btn-danger mx-2">  Delete  </a>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
                         </main>
                             <jsp:include page = "../layout/footer.jsp" />
                     </div>
