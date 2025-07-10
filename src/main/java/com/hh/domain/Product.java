@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,23 +25,27 @@ public class Product {
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false, message = "Giá sản phẩm phải lớn hơn 0")
-    private String price;
+    private Double price;
 
     private String image;
 
     @NotNull
     @NotEmpty(message = "Mô tả chi tiết sản phẩm không được để trống")
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
 
     @NotNull
     @NotEmpty(message = "Mô tả ngắn sản phẩm không được để trống")
     private String shortDesc;
 
+    @Min(0)
     @NotNull
-    @Size(min = 1, message = "Số lượng sản phẩm không được để trống")
-    private String quantity;
-    private String sold;
+    private Long quantity;
+
+    @NotNull
+    @Column(nullable = false)
+    private Long sold = 0L;
+
     private String factory;
     private String target;
 
@@ -58,10 +63,10 @@ public class Product {
     public void setName(String name) {
         this.name = name;
     }
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
     public String getImage() {
@@ -82,16 +87,16 @@ public class Product {
     public void setShortDesc(String shortDesc) {
         this.shortDesc = shortDesc;
     }
-    public String getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
-    public void setQuantity(String quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
-    public String getSold() {
+    public Long getSold() {
         return sold;
     }
-    public void setSold(String sold) {
+    public void setSold(Long sold) {
         this.sold = sold;
     }
     public String getFactory() {

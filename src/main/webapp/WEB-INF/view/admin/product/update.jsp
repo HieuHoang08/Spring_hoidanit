@@ -21,7 +21,7 @@
                         const avatarFile = $("#avatarFile");
                         const orgImage = "${newProduct.image}";
                         if (orgImage) {
-                            const urlImage = "/images/product/" + orgImage;
+                            const urlImage = "/images/products/" + orgImage;
                             $("#avatarPreview").attr("src", urlImage);
                             $("#avatarPreview").css({ "display": "block" });
                         }
@@ -37,9 +37,11 @@
 
 
             <body class="sb-nav-fixed">
-                <jsp:include page="../layout/header.jsp" />
+                <jsp:include page = "../layout/header.jsp" />
                 <div id="layoutSidenav">
-                    <jsp:include page="../layout/sidebar.jsp" />
+                    <div id="layoutSidenav_nav">
+                        <jsp:include page = "../layout/sidebar.jsp" />
+                    </div>
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">

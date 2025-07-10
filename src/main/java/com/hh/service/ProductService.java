@@ -1,6 +1,7 @@
 package com.hh.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -29,11 +30,15 @@ public class ProductService {
     public List<Product> getAllProducts() {
         return this.productRepository.findAll();
     }
-    public Product getProductById(Long id) {
-        return this.productRepository.findById(id).orElse(null);
+
+    public Optional<Product> getProductById(Long id) {
+        return this.productRepository.findById(id);
     }
 
     public Product updateProduct(Product product) {
         return this.productRepository.save(product);
+    }
+    public void deleteProductById(Long id) {
+        this.productRepository.deleteById(id);
     }
 }

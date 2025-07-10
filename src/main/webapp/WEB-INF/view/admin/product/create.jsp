@@ -12,6 +12,16 @@
                 <meta name="author" content="" />
                 <title>Hoi dan IT</title>
                 <link href="/css/styles.css" rel="stylesheet" />
+                 <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        avatarFile.change(function (e) {
+                            const imgURL = URL.createObjectURL(e.target.files[0]);
+                            $("#avatarPreview").attr("src", imgURL);
+                            $("#avatarPreview").css({ "display": "block" });
+                        });
+                    });
+                </script>
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
             </head>
             <body class="sb-nav-fixed">
