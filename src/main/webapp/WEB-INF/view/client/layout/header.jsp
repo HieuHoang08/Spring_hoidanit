@@ -38,8 +38,10 @@
                                         <li class="d-flex align-items-center flex-column" style="min-width: 300px;">
                                             <img style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden;"
                                                 src="/images/avatar/${sessionScope.avatar}" />
+                                                
+
                                             <div class="text-center my-3">
-                                                <c:out value="${sessionScope.fullName}" />
+                                                <c:out value="${sessionScope.fullname}" />
                                             </div>
                                         </li>
 

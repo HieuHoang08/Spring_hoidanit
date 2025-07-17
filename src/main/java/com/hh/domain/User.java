@@ -33,11 +33,11 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(min = 2,  message = "Password must be between 2 and 20 characters long")
+    @Size(min = 3,  message = "Password must be between 2 and 20 characters long")
     private String password;
 
     @NotNull
-    @Size(min = 2, message = "Full name must be between 2 and 50 characters long")
+    @Size(min = 3, message = "Full name must be between 2 and 50 characters long")
     private String fullname;
     private String address;
     private String phone;

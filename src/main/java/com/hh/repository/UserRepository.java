@@ -10,12 +10,11 @@ import com.hh.domain.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User save(User hieuhoang);
-
-    void deleteById(long id);
-
-    List<User> findByEmail(String email);
-
+    User save(User hoidanit); // == UPDATE/ INSERT
+    void deleteById(long id); //đây là phương thức , khi gọi sẽ tự động tạo truy vấn sql
+    List<User> findOneByEmail(String email);
+    List<User> findAll();
     User findById(long id);
-
+    boolean existsByEmail(String email);
+    User findByEmail(String email);
 }
