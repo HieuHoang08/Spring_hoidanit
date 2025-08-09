@@ -2,6 +2,8 @@ package com.hh.controller.client;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.hh.domain.Order;
 import com.hh.domain.Product;
 import com.hh.domain.User;
 import com.hh.domain.dto.RegisterDTO;
+import com.hh.service.OrderService;
 import com.hh.service.ProductService;
 import com.hh.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 
@@ -25,21 +31,27 @@ public class HomePageController {
     private final ProductService productService;
     private final UserService userService;
     private final PasswordEncoder PasswordEncoder;
+    private final OrderService orderService;
 
     public HomePageController(
             ProductService productService,
             UserService userService,
-            PasswordEncoder PasswordEncoder) {
+            PasswordEncoder PasswordEncoder,
+            OrderService orderService) {
 
         this.productService = productService;
         this.userService = userService;
         this.PasswordEncoder = PasswordEncoder;
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
     public String getHomePage(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
+        // Lấy danh sách sản phẩm và thêm vào model
+        Pageable pageable = Pageable.ofSize(10); // Assuming 10 products per page
+        Page<Product> products = this.productService.getAllProducts(pageable);
+        List<Product> productList = products.getContent();
+        model.addAttribute("products", productList);
         return "client/homepage/show";
     }
 
@@ -77,5 +89,16 @@ public class HomePageController {
     public String getDenyPage(Model model) {
 
         return "client/auth/deny";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+        User crrUser = new User();
+        HttpSession session = request.getSession(false);
+        long userId = (Long) session.getAttribute("userId");
+        crrUser.setId(userId);
+        List<Order> orders = this.orderService.fetchOrdersByUser(crrUser.getId());
+        model.addAttribute("orders", orders);
+        return "client/order/history";
     }
 }

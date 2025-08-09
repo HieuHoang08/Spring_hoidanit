@@ -1,9 +1,12 @@
 package com.hh.controller.admin;
 
-import java.lang.foreign.Linker.Option;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.validation.BindingResult;
 import com.hh.domain.Product;
-import com.hh.domain.User;
 import com.hh.service.ProductService;
 import com.hh.service.UploadService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,9 +38,24 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProductPage(Model model) {
-        List   <Product> products = this.productService.getAllProducts();
-        model.addAttribute("products", products);
+    public String getProductPage(Model model, @RequestParam("page") Optional<String> page) {
+        // Lấy danh sách sản phẩm và thêm vào model
+        int pageOp = 1;
+        try{
+            if(page.isPresent()) {
+                pageOp = Integer.parseInt(page.get());
+            }
+        } catch (NumberFormatException e) {
+            // Nếu không thể chuyển đổi sang số, giữ nguyên giá trị mặc định là 1
+            // pageOp = 1;
+        }
+        Pageable pageable = PageRequest.of(pageOp - 1, 2); // Giả sử mỗi trang có 10 sản phẩm
+        Page<Product> products = this.productService.getAllProducts(pageable);
+        List<Product> productList = products.getContent();
+        model.addAttribute("products", productList);
+
+        model.addAttribute("currentPage", pageOp);
+        model.addAttribute("totalPages", products.getTotalPages());
         return "admin/product/show";
     }
 

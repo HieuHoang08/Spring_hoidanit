@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <!DOCTYPE html>
         <html lang="en">
             <head>
@@ -26,10 +27,46 @@
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                                     <li class="breadcrumb-item active">Orders</li>
                                 </ol>
-                                <div>
-                                    order
+                                <div class="mt-5">
+                                        <div class="row">
+                                            <div class="col-12 mx-auto">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h3>Table Orders</h3>
+                                                </div>
+                                                <hr />
+                                                <table class = "table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">ID</th>
+                                                            <th scope="col">Tổng giá</th>
+                                                            <th scope="col">Người dùng</th>
+                                                            <th scope="col">Tình trạng </th>
+                                                            <th scope="col">Hành động</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="order" items="${order}">
+                                                            <tr>
+                                                                <th>${order.id}</th>
+                                                                <td>
+                                                                    <fmt:formatNumber value="${order.totalPrice}" type="number" groupingUsed="true" maxFractionDigits="0" /> đ
+                                                                </td>
 
-                                </div>
+                                                                <td>${order.user.fullname}</td>
+                                                                <td>${order.status}</td>
+                                                                <td>
+                                                                    <a href="/admin/order/${order.id}" class="btn btn-success">  View  </a>
+                                                                    <a href="/admin/order/update/${order.id}" class="btn btn-primary mx-2">  Update  </a>
+                                                                    <a href="/admin/order/delete/${order.id}" class="btn btn-danger mx-2">  Delete  </a>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
                         </main>
                             <jsp:include page = "../layout/footer.jsp" />
                     </div>
